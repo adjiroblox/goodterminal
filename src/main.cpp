@@ -35,11 +35,9 @@ void bash() {
             buffer[i] = 0;
 
             if(strcmp(buffer, "exit") == 0) {
-                fflush(stdout);
-                printf("NO.. I WILL NOT LET YOU EXIT THAT EASY!");
-                sleep(3);
-                fflush(stdout);
+                // printf("NO.. I WILL NOT LET YOU EXIT THAT EASY!"); fine... you win
                 printf("\033[K");
+                return;
             }
 
             system(buffer);
