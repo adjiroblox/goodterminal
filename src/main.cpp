@@ -4,26 +4,15 @@
 #include <string.h>
 
 // to clear all the screen     printf("\033[2J\033[H");
+// ESC[K 	erase in line (same as ESC[0K) to clear one line
 // clear  screen     printf('\033[2J');
-
-char alloveragain[47] = "press s to start over again, press x to quit.\n";
-
-int alloveragains() {
-    char option;
-
-    option = getch();
-
-    if(option == 's')
-        return 0;
-    else if(option == 'x')
-        EXIT_FAILURE;
-    else {
-        printf("type better noob\n");
-        alloveragains();
-    }
-
-    return 0;
-}
+//
+// https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
+//
+// Esc[K   Clear line from cursor right   EL0
+// Esc[0K  Clear line from cursor right   EL0
+// Esc[1K  Clear line from cursor left    EL1
+// Esc[2K  Clear entire line              EL2
 
 void bash() {
     char buffer[100];
@@ -31,18 +20,27 @@ void bash() {
     printf("bash mode: ");
     
     for(int i = 0; i < sizeof(buffer); i++) {
-        buffer[i] = getch();
+        buffer[i] = getche();
 
-        if(strcmp(buffer, "exit\n") == 0) {
-            fflush(stdout);
-            printf("NO.. I WILL NOT LET YOU EXIT THAT EASY!\n");
-            sleep(3);
+        if(buffer[i] == 127) {
+            buffer[i] = 0;
+            buffer[i - 1] = 0;
+            i = i - 2;
+
+            printf("\033[1D\033[0J");
         }
-        
+
+
         if(buffer[i] == 10) {
             buffer[i] = 0;
 
-            printf("\n");
+            if(strcmp(buffer, "exit") == 0) {
+                fflush(stdout);
+                printf("NO.. I WILL NOT LET YOU EXIT THAT EASY!");
+                sleep(3);
+                fflush(stdout);
+                printf("\033[K");
+            }
 
             system(buffer);
             bash();
@@ -53,15 +51,17 @@ void bash() {
 int main() {
     char buffer[100];
 
-    printf("\033[H\033[2J%s", alloveragain);
+    printf("\033[H\033[2J");
 
     for(int i = 0; i < sizeof(buffer); i++) {
-        buffer[i] = getch();
+        buffer[i] = getche();
 
         if(buffer[i] == 127) {
             buffer[i] = 0;
             buffer[i - 1] = 0;
             i = i - 2;
+
+            printf("\033[1D\033[0J");
         }
 
         if(buffer[i] == 10) {
@@ -76,10 +76,6 @@ int main() {
     }
 
     printf("you typed: %s\n", buffer);
-
-    if(alloveragains() == 0) {
-        main();
-    } 
 
     return 0;
 }

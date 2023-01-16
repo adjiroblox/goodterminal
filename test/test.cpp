@@ -30,8 +30,17 @@ void backspacebruh() {
     }
 }
 
+void idk() {
+    printf("idk something somsething ");
+    getch();
+    //printf("\033[K");
+    printf("\033[2K\033[100D");
+    printf("idk something somsething ");
+    getch();
+}
+
 int main() {
-    backspacebruh();
+    idk();
 
     return 0;
 }
