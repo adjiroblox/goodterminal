@@ -3,17 +3,6 @@
 #include <cstdlib>
 #include <string.h>
 
-// to clear all the screen     printf("\033[2J\033[H");
-// ESC[K 	erase in line (same as ESC[0K) to clear one line
-// clear  screen     printf('\033[2J');
-//
-// https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
-//
-// Esc[K   Clear line from cursor right   EL0
-// Esc[0K  Clear line from cursor right   EL0
-// Esc[1K  Clear line from cursor left    EL1
-// Esc[2K  Clear entire line              EL2
-
 void bash() {
     char buffer[100];
 
